@@ -24,17 +24,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//var routePath="./routers/";
-//fs.readdirSync(routePath).forEach(function(file) {
-//    var route=routePath+file;
-//    require(route)(app);
-//});
+var routePath="./routes/";
+fs.readdirSync(routePath).forEach(function(file) {
+    var routeName = path.basename(file,'.js');
+    var route = require(routePath + file);
+    console.log(routeName);
+    app.use('/'+routeName,route);
+});
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+//var users = require('./routes/users');
 
 app.use('/', routes);
-app.use('/users', users);
+//app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
